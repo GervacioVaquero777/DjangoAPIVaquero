@@ -19,8 +19,9 @@ from django.urls import path
 from api.login.login_view import login_views
 from api.home.home_view import home_views
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('login/', login_views, name='login'),
-    path('', views.home, name='home'),
+    path('', home_views, name='index'),
 ]
