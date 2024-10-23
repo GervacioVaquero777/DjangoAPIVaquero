@@ -16,11 +16,11 @@
             <h2 class="text-center mb-4">Login</h2>
             <form action="#" method="POST">
                 <div class="mb-3">
-                    <label for="username" class="form-label">Username</label>
+                    <label for="username" class="form-label">Usuario</label>
                     <input type="text" class="form-control" id="username" name="username" required>
                 </div>
                 <div class="mb-3">
-                    <label for="password" class="form-label">Password</label>
+                    <label for="password" class="form-label">Contraseña</label>
                     <input type="password" class="form-control" id="password" name="password" required>
                 </div>
                 <div class="d-grid">
@@ -37,8 +37,8 @@
                     </button>
                 </div>
                 <div class="text-center mt-3">
-                    <a href="#" class="d-block">Forgot Password?</a>
-                    <a href="#" class="d-block">Sign Up</a>
+                    <a href="{% url 'recuperar' %}" class="d-block">Forgot Password?</a>
+                    <a href="{% url 'registro' %}" class="d-block">Sign Up</a>
                 </div>
             </form>
         </div>
