@@ -8,52 +8,68 @@ from django.contrib.auth.hashers import make_password
 # Create your views here.
 def login_views(request):
     template_name = "login.html"
-    
+
+    # Verifica si el usuario ya está autenticado y activo
     if request.user.is_authenticated and request.user.is_active:
         return redirect('index')
-    
+
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
         user = authenticate(request, username=username, password=password)
-        if user is not None:
-            login(request, user)
-            return redirect('index')
-        else:
-            return render(request, template_name, {'error': 'Credenciales invalidas'})
-    return render(request,template_name)
 
+        if user is not None:
+            # Verifica si el usuario autenticado es activo
+            if user.is_active:
+                login(request, user)
+                return redirect('index')
+            else:
+                messages.error(request, 'El usuario no está activo')
+        else:
+            messages.error(request, 'Invalid login credentials')
+
+    return render(request, template_name)
 # view for registrer
-def registro_views(request):
+def registrar_views(request):
     template_name = "registro.html"
     
     if request.method == 'POST':
+        # Obtención de los datos del formulario
         username = request.POST['username']
         email = request.POST['email']
         password = request.POST['password']
-        confirm_password = request.POST['confirm_password']
-        
-        if password != confirm_password:
-            messages.error(request, "The passwords do not match.")
+        password_confirmation = request.POST['confirm_password']
+
+        # Verificar si las contraseñas coinciden
+        if password != password_confirmation:
+            messages.error(request, "Las contraseñas no coinciden")
             return render(request, template_name)
 
+        # Verificar si el nombre de usuario ya existe
         if User.objects.filter(username=username).exists():
-            messages.error(request, "The username is already in use.")
-            return render(request, template_name)
-        
-        if User.objects.filter(email=email).exists():
-            messages.error(request, "The email is already in use")
+            messages.error(request, "El usuario ya existe")
             return render(request, template_name)
 
+        # Verificar si el correo ya existe
+        if User.objects.filter(email=email).exists():
+            messages.error(request, "El correo ya existe")
+            return render(request, template_name)
+
+        # Crear nuevo usuario
         user = User(
-            username=username, 
-            email=email, 
-            password=make_password(password),
-            is_active = 1
-            )
+            username=username,
+            email=email,
+        )
+        user.set_password(password)  # Configura la contraseña de forma segura
+        user.is_active = False  # Por defecto, los nuevos usuarios están inactivos
         user.save()
-        messages.success(request, "Account successfully created.")
-    return render(request,template_name)
+
+        # Mensaje de éxito y redirección al login
+        messages.success(request, "Cuenta creada exitosamente. Por favor, espera a que un administrador active tu cuenta.")
+        return redirect('login')
+
+    # Retornar la plantilla en caso de GET o error
+    return render(request, template_name)
 
 # view for forgot the assword
 def recuperar_views(request):
