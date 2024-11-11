@@ -1,4 +1,6 @@
 {% load static %}
+{% load socialaccount %}
+{% providers_media_js %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -39,10 +41,14 @@
                     <button type="submit" class="btn btn-primary mb-2">Login</button>
                 </div>
                 <div class="d-grid mb-2">
-                    <button type="button" class="btn btn-outline-danger">
-                        <i class="bi bi-google"></i> Login with Google
-                    </button>
+                    </form>
+                        <a href="{% provider_login_url 'google' %}" class="btn btn-danger btn-block btn-lg shadow-lg mt-2">
+                            Google Sign In
+                        </a>
                 </div>
+                
+                
+
                 <div class="d-grid mb-2">
                     <button type="button" class="btn btn-outline-primary">
                         <i class="bi bi-facebook"></i> Login with Facebook

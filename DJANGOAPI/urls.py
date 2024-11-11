@@ -18,6 +18,8 @@ from django.contrib import admin
 from django.urls import path
 from api.login.login_view import (login_views, registrar_views, recuperar_views, logout_view)
 from api.home.home_view import home_views
+from django.contrib import admin
+from django.urls import path, include
 
 
 
@@ -29,5 +31,7 @@ urlpatterns = [
     path('recuperar/', recuperar_views, name='recuperar'),
     path('', home_views, name='index'),
     path('index/', home_views, name='index'),
+    path('accounts/', include('allauth.urls')),
+    path('admin/', admin.site.urls),
 
 ]
